@@ -7,24 +7,26 @@
   <div class="col-sm-6 offset-sm-3">
    <h3>Customer Registration</h3>
    <hr>
-
+<!-- form rendering section -->
    <form action="" method="post" novalidate class="shadow p-5">
-    <div class="mb-3">
-     <label for="inputEmail4" class="form-label">Email</label>
-     <input type="email" class="form-control" id="inputEmail4">
-     <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-    </div>
-    <div class="mb-3">
-     <label for="inputPassword1" class="form-label">Password</label>
-     <input type="password" class="form-control" id="inputPassword1">
-    </div>
-    <div class="mb-3">
-     <label for="inputPassword2" class="form-label">Confirm Password</label>
-     <input type="password" class="form-control" id="inputPassword2">
-    </div>
-    <div class="text-end">
-     <button type="button" class="btn btn-danger">Submit</button>
-    </div>
+
+      {% if messages %}
+      {% for message in messages %}
+
+      <p {% if message.tags %} class="alert alert-{{message.tags}} mb-5" {% endif %}>{{message}}</p>
+
+      {% endfor %}
+      {% endif %}
+
+      {% csrf_token %}
+      {% for fm in form %}
+      <div class="form-group mb-3">
+         {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>
+
+      </div>
+      {% endfor %}
+      <input class="btn btn-primary" type="submit" value="Submit">
+<!-- form section end -->
     <br>
     <div class="text-center text-primary fw-bold"><small>Existing User ? <a href="{% url 'login' %}"
        class="text-danger">Login Now</a> </small></div>
