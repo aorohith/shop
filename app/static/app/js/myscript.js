@@ -23,6 +23,7 @@ $('#slider1, #slider2, #slider3').owlCarousel({
 })
 
 
+// cart count plus button function
 
 $('.plus-cart').click(function(){
     var id = $(this).attr("pid").toString();
@@ -41,6 +42,7 @@ $('.plus-cart').click(function(){
     })
 })
 
+// cart count minus button function
 
 $('.minus-cart').click(function(){
     var id = $(this).attr("pid").toString();
@@ -59,3 +61,20 @@ $('.minus-cart').click(function(){
     })
 })
 
+
+$('.remove-cart').click(function(){
+    var id = $(this).attr("pid").toString();
+    var eml = this
+    $.ajax({
+        type:"GET",
+        url:"/removecart",
+        data:{
+            prod_id:id
+        },
+        success:function(data){
+            document.getElementById("amount").innerText = data.amount
+            document.getElementById("totalamount").innerText = data.totalamount
+            eml.parentNode.parentNode.parentNode.parentNode.remove()
+        }
+    })
+})
