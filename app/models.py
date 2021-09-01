@@ -72,8 +72,8 @@ class Product(models.Model):
     product_image = models.ImageField(upload_to='producting')
 
 
-def __str__(self):
-    return str(self.id)
+    def __str__(self):
+        return str(self.id)
 
 
 class Cart(models.Model):
@@ -81,8 +81,12 @@ class Cart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveBigIntegerField(default=1)
 
-def __str__(self):
-    return str(self.id)
+    def __str__(self):
+        return str(self.id)
+
+    @property
+    def total_cost(self):
+        return self.quantity * self.product.discounted_price
 
 STATUS_CHOICES = (
     ('Accepted',"Accepted"),
