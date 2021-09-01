@@ -19,12 +19,12 @@
     <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
 
 
-    <title>ShoppingX | {% block title %} {% endblock title %} </title>
+    <title>Shop | {% block title %} {% endblock title %} </title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
      <div class="container">
-       <a class="navbar-brand" href="/">ShoppingX</a>
+       <a class="navbar-brand" href="/">Shop</a>
        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
        </button>
@@ -71,7 +71,7 @@
                </ul>
               </li>
               <li class="nav-item mx-2">
-              <a href="{% url 'add-to-cart' %}" class="nav-link text-white"><span class="badge bg-danger">4</span> Cart </a>
+              <a href="{% url 'showcart' %}" class="nav-link text-white"><span class="badge bg-danger">4</span> Cart </a>
               </li>
             {% else %}
               <li class="nav-item mx-2">
