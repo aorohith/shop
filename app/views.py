@@ -12,15 +12,19 @@ from django.utils.decorators import method_decorator
 
 class ProductView(View):
     def get(self,request):
+        carttotal = 0
         mobiles = Product.objects.filter(category='M')
         laptops = Product.objects.filter(category='L')
         topwears = Product.objects.filter(category='TW')
         bottomwears = Product.objects.filter(category='BW')
+        if request.user.is_authenticated:
+            carttotal = len(Cart.objects.filter(user=request.user))
         content = {
             'mobiles':mobiles,
             'laptops':laptops,
             'topwears':topwears,
             'bottomwears':bottomwears,
+            'carttotal':carttotal,
         }
         return render(request, 'app/home.html' ,content)
 
@@ -29,9 +33,11 @@ class ProductDetailView(View):
     def get(self,request,pk):
         product=Product.objects.get(pk=pk)
         item_already_in_cart = False
+        carttotal = 0
         if request.user.is_authenticated:
+            carttotal = len(Cart.objects.filter(user=request.user))
             item_already_in_cart = Cart.objects.filter(Q(product=product.id) & Q(user=request.user)).exists()
-        content = {'product':product, 'item_already_in_cart':item_already_in_cart}
+        content = {'product':product, 'item_already_in_cart':item_already_in_cart, 'carttotal':carttotal}
         print(item_already_in_cart)
         return render(request,'app/productdetail.html',content)
 
@@ -58,7 +64,10 @@ def show_cart(request):
                 tempamount = (p.quantity * p.product.discounted_price)
                 amount += tempamount
                 totalamount = amount + shipping_amount
-            content = {'carts':cart,'amount':amount, 'totalamount':totalamount}
+            carttotal = 0
+            if request.user.is_authenticated:
+                carttotal = len(Cart.objects.filter(user=request.user))
+            content = {'carts':cart,'amount':amount, 'totalamount':totalamount,'carttotal':carttotal}
             return render(request, 'app/addtocart.html',content)
         else:
             return render(request, 'app/emptycart.html')
@@ -160,17 +169,27 @@ def payment_done(request):
 @login_required
 def orders(request):
     op = OrderPlaced.objects.filter(user = request.user)
-    return render(request, 'app/orders.html',{'order_placed':op})
+    carttotal = 0
+    if request.user.is_authenticated:
+        carttotal = len(Cart.objects.filter(user=request.user))
+    return render(request, 'app/orders.html',{'order_placed':op,'carttotal':carttotal})
 
 @login_required
 def buy_now(request):
- return render(request, 'app/buynow.html')
+    carttotal = 0
+    if request.user.is_authenticated:
+        carttotal = len(Cart.objects.filter(user=request.user))
+    return render(request, 'app/buynow.html',{'carttotal':carttotal})
 
 @login_required
 def address(request):
     add = Customer.objects.filter(user=request.user)
+    carttotal = 0
+    if request.user.is_authenticated:
+        carttotal = len(Cart.objects.filter(user=request.user))
     content = {'add':add,
-               'active':'btn-primary'
+               'active':'btn-primary',
+               'carttotal': carttotal,
     }
     return render(request, 'app/address.html',content)
 
@@ -181,8 +200,10 @@ def mobile(request, data=None):
         mobiles = Product.objects.filter(category='M')
     elif data == 'POCO' or data == 'Realme' or data == 'Apple':
         mobiles = Product.objects.filter(category='M').filter(brand=data)
-
-    return render(request, 'app/mobile.html', {'mobiles':mobiles})
+    carttotal = 0
+    if request.user.is_authenticated:
+        carttotal = len(Cart.objects.filter(user=request.user))
+    return render(request, 'app/mobile.html', {'mobiles':mobiles,'carttotal':carttotal})
 
 class CustRegView(View):
     def get(self,request):
@@ -201,8 +222,12 @@ class CustRegView(View):
 class ProfileView(View):
     def get(self,request):
         form = CustProfileForm()
+        carttotal = 0
+        if request.user.is_authenticated:
+            carttotal = len(Cart.objects.filter(user=request.user))
         content = {'form':form,
-                    'active':'btn-primary'
+                    'active':'btn-primary',
+                    'carttotal':carttotal,
         }
         return render(request,'app/profile.html', content )
     
