@@ -84,6 +84,7 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
+# for seperate total amount of cart products
     @property
     def total_cost(self):
         return self.quantity * self.product.discounted_price

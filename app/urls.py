@@ -27,6 +27,9 @@ urlpatterns = [
     # categorised view
     path('mobile/', views.mobile, name='mobile'),
     path('mobiledata/<slug:data>', views.mobile, name='mobiledata'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('paymentdone/', views.payment_done, name='paymentdone'),
+
 
     # login and logout
     path('accounts/login/', auth_views.LoginView.as_view(template_name='app/login.html',authentication_form=LoginForm),name='login'),
@@ -44,5 +47,4 @@ urlpatterns = [
 
 
     path('registration/', views.CustRegView.as_view(), name='customerregistration'),
-    path('checkout/', views.checkout, name='checkout'),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

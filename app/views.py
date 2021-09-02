@@ -122,6 +122,36 @@ def remove_cart(request):
         return JsonResponse(data)
 
 
+def checkout(request):
+    user = request.user
+    add = Customer.objects.filter(user=user)
+    cart_items = Cart.objects.filter(user=user)
+    amount = 0.0
+    shipping_amount = 70.0
+    cart_product = [p for p in Cart.objects.all() if p.user == request.user ]
+    if cart_product:
+        for p in cart_product:
+            tempamount = (p.quantity * p.product.discounted_price)
+            amount += tempamount
+        totalamount = amount + shipping_amount
+    content = {'add':add, 'totalamount':totalamount,'cart_items':cart_items}
+    return render(request, 'app/checkout.html', content)
+
+def payment_done(request):
+    user = request.user
+    custid = request.GET.get('custid')
+    customer = Customer.objects.get(id=custid)
+    cart = Cart.objects.filter(user=user)
+    for c in cart:
+        OrderPlaced(user=user, customer=customer, product=c.product, quantity=c.quantity).save()
+        c.delete()
+    return redirect("orders")
+
+def orders(request):
+    op = OrderPlaced.objects.filter(user = request.user)
+    return render(request, 'app/orders.html',{'order_placed':op})
+
+
 def buy_now(request):
  return render(request, 'app/buynow.html')
 
@@ -132,8 +162,7 @@ def address(request):
     }
     return render(request, 'app/address.html',content)
 
-def orders(request):
- return render(request, 'app/orders.html')
+
 
 def mobile(request, data=None):
     if data == None:
@@ -156,20 +185,7 @@ class CustRegView(View):
         return render(request, 'app/customerregistration.html',{'form':form})
 
 
-def checkout(request):
-    user = request.user
-    add = Customer.objects.filter(user=user)
-    cart_items = Cart.objects.filter(user=user)
-    amount = 0.0
-    shipping_amount = 70.0
-    cart_product = [p for p in Cart.objects.all() if p.user == request.user ]
-    if cart_product:
-        for p in cart_product:
-            tempamount = (p.quantity * p.product.discounted_price)
-            amount += tempamount
-        totalamount = amount + shipping_amount
-    content = {'add':add, 'totalamount':totalamount,'cart_items':cart_items}
-    return render(request, 'app/checkout.html', content)
+
 
 class ProfileView(View):
     def get(self,request):
