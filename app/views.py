@@ -6,6 +6,8 @@ from django.views import View
 from .forms import CustRegForm,CustProfileForm
 from django.contrib import messages
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 class ProductView(View):
@@ -26,8 +28,13 @@ class ProductView(View):
 class ProductDetailView(View):
     def get(self,request,pk):
         product=Product.objects.get(pk=pk)
-        return render(request,'app/productdetail.html',{'product':product})
+        item_already_in_cart = False
+        item_already_in_cart = Cart.objects.filter(Q(product=product.id) & Q(user=request.user)).exists()
+        content = {'product':product, 'item_already_in_cart':item_already_in_cart}
+        print(item_already_in_cart)
+        return render(request,'app/productdetail.html',content)
 
+@login_required
 def add_to_cart(request):
     user = request.user
     product_id = request.GET.get('prod_id')
@@ -35,6 +42,7 @@ def add_to_cart(request):
     Cart(user=user, product=product).save()
     return redirect('/cart')
 
+@login_required
 def show_cart(request):
     if request.user.is_authenticated:
         user = request.user
@@ -121,7 +129,7 @@ def remove_cart(request):
         }
         return JsonResponse(data)
 
-
+@login_required
 def checkout(request):
     user = request.user
     add = Customer.objects.filter(user=user)
@@ -137,6 +145,7 @@ def checkout(request):
     content = {'add':add, 'totalamount':totalamount,'cart_items':cart_items}
     return render(request, 'app/checkout.html', content)
 
+@login_required
 def payment_done(request):
     user = request.user
     custid = request.GET.get('custid')
@@ -147,14 +156,16 @@ def payment_done(request):
         c.delete()
     return redirect("orders")
 
+@login_required
 def orders(request):
     op = OrderPlaced.objects.filter(user = request.user)
     return render(request, 'app/orders.html',{'order_placed':op})
 
-
+@login_required
 def buy_now(request):
  return render(request, 'app/buynow.html')
 
+@login_required
 def address(request):
     add = Customer.objects.filter(user=request.user)
     content = {'add':add,
@@ -172,7 +183,6 @@ def mobile(request, data=None):
 
     return render(request, 'app/mobile.html', {'mobiles':mobiles})
 
-
 class CustRegView(View):
     def get(self,request):
         form = CustRegForm()
@@ -186,7 +196,7 @@ class CustRegView(View):
 
 
 
-
+@method_decorator(login_required, name='dispatch')
 class ProfileView(View):
     def get(self,request):
         form = CustProfileForm()
