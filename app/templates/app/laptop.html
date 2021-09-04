@@ -1,0 +1,41 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Laptops{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+  <div class="col-sm-3">
+    <div class="list-group">
+        <a href="{% url 'laptop' %}" class="list-group-item list-group-item-action active">All Laptops</a>
+        <a href="{% url 'laptopdata' 'Apple' %}" class="list-group-item list-group-item-action">Apple</a>
+        <a href="{% url 'laptopdata' 'HP' %}" class="list-group-item list-group-item-action">HP</a>
+        <a href="{% url 'laptopdata' 'Asuse' %}" class="list-group-item list-group-item-action">Asuse</a>
+        <a href="{% url 'laptopdata' 'Lenovo' %}" class="list-group-item list-group-item-action">Lenovo</a>
+      </div>
+  </div>
+  <div class="col-sm-8 offset-sm-1">
+   <!-- products rendering section -->
+   <div class="container">
+     <div class="row">
+       {% for product in laptops %}
+       <div class="col-md-3">
+         <div class="card">
+           <a href="{{product_objects.id}}"></a>
+           <img src="{{product.product_image.url}}" class="card-img-top card-image" alt="...">
+           <div class="card-body">
+             <h5 class="card-title">{{product.title}}</h5>
+             <p class="card-text">{{product.discounted_price}}</p>
+             <a href="/{{product.id}}" class="btn btn-primary">View</a>
+             <button id="{{product.id}}" href="" class="btn btn-primary atc">Add to cart</button>
+           </div>
+         </div>
+       </div>
+
+       {% endfor %}
+     </div>
+   </div>
+   <!-- products section end -->
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

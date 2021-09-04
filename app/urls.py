@@ -27,6 +27,10 @@ urlpatterns = [
     # categorised view
     path('mobile/', views.mobile, name='mobile'),
     path('mobiledata/<slug:data>', views.mobile, name='mobiledata'),
+
+    path('laptop/', views.laptop, name='laptop'),
+    path('mobiledata/<slug:data>', views.mobile, name='mobiledata'),
+
     path('checkout/', views.checkout, name='checkout'),
     path('paymentdone/', views.payment_done, name='paymentdone'),
 
