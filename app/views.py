@@ -207,13 +207,13 @@ def mobile(request, data=None):
 
 def laptop(request, data=None):
     if data == None:
-        mobiles = Product.objects.filter(category='L')
+        laptops = Product.objects.filter(category='L')
     elif data == 'HP' or data == 'Asuse' or data == 'Apple' or data =='Lenovo':
-        laptops = Product.objects.filter(category='M').filter(brand=data)
+        laptops = Product.objects.filter(category='L').filter(brand=data)
     carttotal = 0
     if request.user.is_authenticated:
         carttotal = len(Cart.objects.filter(user=request.user))
-    return render(request, 'app/mobile.html', {'laptops':laptops,'carttotal':carttotal})
+    return render(request, 'app/laptop.html', {'laptops':laptops,'carttotal':carttotal})
 
 
 class CustRegView(View):
