@@ -215,6 +215,16 @@ def laptop(request, data=None):
         carttotal = len(Cart.objects.filter(user=request.user))
     return render(request, 'app/laptop.html', {'laptops':laptops,'carttotal':carttotal})
 
+def topwear(request, data=None):
+    if data == None:
+        topwears = Product.objects.filter(category='TW')
+    elif data == 'NIKE' or data == 'PUMA' or data == 'ADIDAS':
+        topwears = Product.objects.filter(category='TW').filter(brand=data)
+    carttotal = 0
+    if request.user.is_authenticated:
+        carttotal = len(Cart.objects.filter(user=request.user))
+    return render(request, 'app/topwear.html', {'topwears':topwears,'carttotal':carttotal})
+
 
 class CustRegView(View):
     def get(self,request):

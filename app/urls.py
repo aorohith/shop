@@ -31,6 +31,9 @@ urlpatterns = [
     path('laptop/', views.laptop, name='laptop'),
     path('laptopdata/<slug:data>', views.laptop, name='laptopdata'),
 
+    path('topwear/', views.topwear, name='topwear'),
+    path('topweardata/<slug:data>', views.topwear, name='topweardata'),
+
     path('checkout/', views.checkout, name='checkout'),
     path('paymentdone/', views.payment_done, name='paymentdone'),
 
