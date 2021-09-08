@@ -29,6 +29,13 @@ class ProductView(View):
         return render(request, 'app/home.html' ,content)
 
 
+def search(request):
+    product_objects = Product.objects.all()
+    item_name = request.GET.get('item_name')
+    if item_name != '' and item_name is not None:
+        product_objects = product_objects.filter(title__icontains = item_name)
+    return render(request,'app/search.html',{'product_objects':product_objects})
+
 class ProductDetailView(View):
     def get(self,request,pk):
         product=Product.objects.get(pk=pk)
