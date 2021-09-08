@@ -16,7 +16,7 @@
        {% for product in product_objects %}
        <div class="col-md-3">
          <div class="card">
-           <a href="{{product_objects.id}}"></a>
+           <a href="{{product.id}}"></a>
            <img src="{{product.product_image.url}}" class="card-img-top card-image" alt="...">
            <div class="card-body">
              <h5 class="card-title">{{product.title}}</h5>
