@@ -36,6 +36,10 @@ def search(request):
         product_objects = product_objects.filter(title__icontains = item_name)
     return render(request,'app/search.html',{'product_objects':product_objects})
 
+def allproduct(request):
+    products = Product.objects.all()
+    return render(request, 'app/search.html',{'product_objects':products})
+
 class ProductDetailView(View):
     def get(self,request,pk):
         product=Product.objects.get(pk=pk)
@@ -231,6 +235,17 @@ def topwear(request, data=None):
     if request.user.is_authenticated:
         carttotal = len(Cart.objects.filter(user=request.user))
     return render(request, 'app/topwear.html', {'topwears':topwears,'carttotal':carttotal})
+
+
+def bottomwear(request, data=None):
+    if data == None:
+        bottomwears = Product.objects.filter(category='BW')
+    elif data == 'NIKE' or data == 'PUMA' or data == 'ADIDAS':
+        topwears = Product.objects.filter(category='BW').filter(brand=data)
+    carttotal = 0
+    if request.user.is_authenticated:
+        carttotal = len(Cart.objects.filter(user=request.user))
+    return render(request, 'app/bottomwear.html', {'bottomwears':bottomwears,'carttotal':carttotal})
 
 
 class CustRegView(View):

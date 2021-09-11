@@ -9,6 +9,7 @@ from .forms import *
 urlpatterns = [
     path('',views.ProductView.as_view(),name='home'),
     path('search/',views.search,name="search"),
+    path('allproduct/',views.allproduct,name="allproduct"),
     path('product-detail/<int:pk>',views.ProductDetailView.as_view(),name="product-detail"),
 
     # Cart Section
@@ -34,6 +35,9 @@ urlpatterns = [
 
     path('topwear/', views.topwear, name='topwear'),
     path('topweardata/<slug:data>', views.topwear, name='topweardata'),
+
+    path('bottowear/', views.bottomwear, name='bottomwear'),
+    path('bottomweardata/<slug:data>', views.bottomwear, name='bottomweardata'),
 
     path('checkout/', views.checkout, name='checkout'),
     path('paymentdone/', views.payment_done, name='paymentdone'),

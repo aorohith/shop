@@ -1,0 +1,40 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Bottom Wears{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+  <div class="col-sm-3">
+    <div class="list-group">
+        <a href="{% url 'topwear' %}" class="list-group-item list-group-item-action active">All Bottom Wears</a>
+        <a href="{% url 'topweardata' 'NIKE' %}" class="list-group-item list-group-item-action">NIKE</a>
+        <a href="{% url 'topweardata' 'PUMA' %}" class="list-group-item list-group-item-action">PUMA</a>
+        <a href="{% url 'topweardata' 'ADIDAS' %}" class="list-group-item list-group-item-action">ADIDAS</a>
+      </div>
+  </div>
+  <div class="col-sm-8 offset-sm-1">
+   <!-- products rendering section -->
+   <div class="container">
+     <div class="row">
+       {% for product in bottomwears %}
+       <div class="col-md-3">
+         <div class="card">
+           <a href="{{product_objects.id}}"></a>
+           <img src="{{product.product_image.url}}" class="card-img-top card-image" alt="...">
+           <div class="card-body">
+             <h5 class="card-title">{{product.title}}</h5>
+             <p class="card-text">{{product.discounted_price}}</p>
+             <a href="/{{product.id}}" class="btn btn-primary">View</a>
+             <button id="{{product.id}}" href="" class="btn btn-primary atc">Add to cart</button>
+           </div>
+         </div>
+       </div>
+
+       {% endfor %}
+     </div>
+   </div>
+   <!-- products section end -->
+  </div>
+ </div>
+</div>
+{% endblock main-content %}
